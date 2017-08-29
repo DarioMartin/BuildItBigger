@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -18,10 +20,17 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ProgressBar progressBar;
+    private Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
+        button = (Button) findViewById(R.id.joke_button);
     }
 
 
@@ -55,6 +64,13 @@ public class MainActivity extends AppCompatActivity {
         private MyApi myApiService = null;
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            button.setEnabled(false);
+        }
+
+        @Override
         protected String doInBackground(Void... params) {
             if (myApiService == null) {
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
@@ -74,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, JokeViewerActivity.class);
             intent.putExtra(JokeViewerActivity.JOKE, result);
             startActivity(intent);
+            progressBar.setVisibility(View.GONE);
+            button.setEnabled(true);
         }
     }
 
