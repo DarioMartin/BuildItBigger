@@ -3,6 +3,10 @@ package com.udacity.gradle.builditbigger;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,11 +18,14 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.nanodegree.builditbigger.backend.myApi.MyApi;
 import com.nanodegree.dario.jokeviewer.JokeViewerActivity;
+import com.udacity.gradle.builditbigger.idlingResources.SimpleIdlingResource;
 
 import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
+    @Nullable
+    private SimpleIdlingResource idlingResource;
 
     private ProgressBar progressBar;
     private Button button;
@@ -57,10 +64,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
-        new EndpointsAsyncTask().execute();
+        getIdlingResource();
+        if (idlingResource != null) idlingResource.setIdleState(false);
+        new GetJokeAsyncTask().execute();
     }
 
-    class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
+    private class GetJokeAsyncTask extends AsyncTask<Void, Void, String> {
         private MyApi myApiService = null;
 
         @Override
@@ -87,12 +96,27 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Intent intent = new Intent(MainActivity.this, JokeViewerActivity.class);
-            intent.putExtra(JokeViewerActivity.JOKE, result);
-            startActivity(intent);
+            onJokeReceived(result);
             progressBar.setVisibility(View.GONE);
             button.setEnabled(true);
+            if (idlingResource != null) idlingResource.setIdleState(true);
         }
+    }
+
+    protected void onJokeReceived(String joke) {
+        Intent intent = new Intent(MainActivity.this, JokeViewerActivity.class);
+        intent.putExtra(JokeViewerActivity.JOKE, joke);
+        startActivity(intent);
+    }
+
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (idlingResource == null) {
+            idlingResource = new SimpleIdlingResource();
+        }
+        return idlingResource;
     }
 
 }
