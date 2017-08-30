@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 public class MainTestActivityTest {
 
     @Rule
-    public IntentsTestRule<MainTestActivity> activityRule = new IntentsTestRule<>(MainTestActivity.class);
+    public IntentsTestRule<MainTestActivity> activityRule = new IntentsTestRule<>(MainActivity.class);
 
     private IdlingResource idlingResource;
 
