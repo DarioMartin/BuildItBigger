@@ -1,16 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 24
     buildToolsVersion "24.0.3"
 
     defaultConfig {
         applicationId "com.udacity.gradle.builditbigger"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -18,13 +19,35 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors {
+        flavorTesting {
+            applicationIdSuffix ".test"
+            versionNameSuffix "-test"
+        }
+        free {
+            applicationIdSuffix ".free"
+            versionNameSuffix "-free"
+        }
+        paid {
+            applicationIdSuffix ".paid"
+            versionNameSuffix "-paid"
+        }
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.google.android.gms:play-services-ads:9.8.0'
+    compile project(path: ':jokeviewer')
+    compile project(path: ':backend', configuration: 'android-endpoints')
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.google.code.findbugs:jsr305:2.0.1'
+    compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:24.2.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
+    androidTestCompile 'com.android.support:support-annotations:25.3.1'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    freeCompile 'com.google.android.gms:play-services-ads:11.0.4'
 }
