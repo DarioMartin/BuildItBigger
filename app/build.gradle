@@ -21,16 +21,14 @@ android {
     }
 
     productFlavors {
-        flavourTesting {
+        flavorTesting {
             applicationIdSuffix ".test"
             versionNameSuffix "-test"
         }
-
         free {
             applicationIdSuffix ".free"
             versionNameSuffix "-free"
         }
-
         paid {
             applicationIdSuffix ".paid"
             versionNameSuffix "-paid"
