@@ -1,7 +1,5 @@
 package com.udacity.gradle.builditbigger;
 
-import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainTestActivity extends MainActivity {
