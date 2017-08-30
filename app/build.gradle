@@ -21,19 +21,17 @@ android {
     }
 
     productFlavors {
-        flavourTesting {
+        flavorTesting {
             applicationIdSuffix ".test"
             versionNameSuffix "-test"
         }
-
         free {
-            applicationIdSuffix ".test"
-            versionNameSuffix "-test"
+            applicationIdSuffix ".free"
+            versionNameSuffix "-free"
         }
-
         paid {
-            applicationIdSuffix ".test"
-            versionNameSuffix "-test"
+            applicationIdSuffix ".paid"
+            versionNameSuffix "-paid"
         }
     }
 }
@@ -43,7 +41,7 @@ dependencies {
     compile project(path: ':jokeviewer')
     compile project(path: ':backend', configuration: 'android-endpoints')
     compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.google.android.gms:play-services-ads:11.0.4'
+    freeCompile 'com.google.android.gms:play-services-ads:11.0.4'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
